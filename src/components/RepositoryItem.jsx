@@ -1,5 +1,6 @@
 import { StyleSheet, View, Image } from "react-native";
 import Text from "./Text";
+
 const styles = StyleSheet.create({
   view: {
     backgroundColor: "white",
