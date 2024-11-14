@@ -61,10 +61,10 @@ const styles = StyleSheet.create({
     display: "flex",
     flexDirection: "row",
     alignItems: "flex-start",
+    justifyContent: "flex-start",
     gap: 10,
-    justifyContent: "space-around",
     flexShrink: 1,
-    paddingHorizontal: 20,
+    paddingHorizontal: 5,
     paddingVertical: 10,
   },
   rating: {
@@ -78,6 +78,9 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
     flexDirection: "row",
+  },
+  review: {
+    flexShrink: 1,
   }
 });
 
@@ -104,7 +107,7 @@ function ReviewItem({ review }) {
       <View style={styles.rating}>
         <Text>{review.rating}</Text>
       </View>
-      <View>
+      <View style={styles.review}>
         <Text color="primary" fontWeight="bold" fontSize="subheading">{review.user.username}</Text>
         <Text>{new Date(review.createdAt).toDateString()}</Text>
         <Text>{review.text}</Text>

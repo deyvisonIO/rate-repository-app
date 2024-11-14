@@ -31,6 +31,7 @@ export default function AppBar() {
       <ScrollView horizontal>
         <Tab link="/" content="Repositories" />
         {!loading && !data?.me?.username && <Tab link="/sign-in" content="Sign In" />}
+        {!loading && !data?.me?.username && <Tab link="/sign-up" content="Sign Up" />}
         {!loading && data?.me?.username && <Tab link="/create-review" content="Create Review" />}
         {!loading && data?.me?.username && <Tab link="/sign-out" content="Sign Out" />}
       </ScrollView>
