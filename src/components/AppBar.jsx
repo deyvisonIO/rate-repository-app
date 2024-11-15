@@ -4,6 +4,7 @@ import Constants from "expo-constants";
 import { Link } from "react-router-native";
 import { useQuery } from "@apollo/client";
 import { ME } from "../graphql/queries";
+import useMe from "../hooks/useMe";
 
 const styles = StyleSheet.create({
   container: {
@@ -24,7 +25,7 @@ const styles = StyleSheet.create({
 });
 
 export default function AppBar() {
-  const { data, loading } =  useQuery(ME); 
+  const { data, loading } =  useMe(false); 
 
   return (
     <View style={styles.container}>
@@ -33,6 +34,7 @@ export default function AppBar() {
         {!loading && !data?.me?.username && <Tab link="/sign-in" content="Sign In" />}
         {!loading && !data?.me?.username && <Tab link="/sign-up" content="Sign Up" />}
         {!loading && data?.me?.username && <Tab link="/create-review" content="Create Review" />}
+        {!loading && data?.me?.username && <Tab link="/my-reviews" content="My Reviews" />}
         {!loading && data?.me?.username && <Tab link="/sign-out" content="Sign Out" />}
       </ScrollView>
     </View>

@@ -1,6 +1,6 @@
 import { StyleSheet, View, Image, Pressable, FlatList } from "react-native";
 import Text from "./Text";
-import { useParams } from "react-router-native";
+import { useNavigate, useParams } from "react-router-native";
 import useRepository from "../hooks/useRepository";
 import { openURL } from "expo-linking";
 import { ItemSeparator } from "./RepositoryList";
@@ -55,6 +55,7 @@ const styles = StyleSheet.create({
     paddingVertical: 10,
     textAlign: "center",
     margin: 12,
+    paddingHorizontal: 20,
   },
   reviewItem: {
     backgroundColor: "white",
@@ -81,6 +82,12 @@ const styles = StyleSheet.create({
   },
   review: {
     flexShrink: 1,
+  },
+  actions: {
+    display: "flex",
+    flexDirection: "row",
+    justifyContent: "center",
+    alignItems: "center"
   }
 });
 
@@ -101,17 +108,31 @@ export function RepositoryItemPage() {
   )
 }
 
-function ReviewItem({ review }) {
+export function ReviewItem({ review, actions, confirmDeletion }) {
+  const navigate = useNavigate();
+
   return (
-    <View style={styles.reviewItem}>
-      <View style={styles.rating}>
-        <Text>{review.rating}</Text>
+    <View style={{ backgroundColor: "white"}}>
+      <View style={styles.reviewItem}>
+        <View style={styles.rating}>
+          <Text>{review.rating}</Text>
+        </View>
+        <View style={styles.review}>
+          <Text color="primary" fontWeight="bold" fontSize="subheading">{review.user.username}</Text>
+          <Text>{new Date(review.createdAt).toDateString()}</Text>
+          <Text>{review.text}</Text>
+        </View>
       </View>
-      <View style={styles.review}>
-        <Text color="primary" fontWeight="bold" fontSize="subheading">{review.user.username}</Text>
-        <Text>{new Date(review.createdAt).toDateString()}</Text>
-        <Text>{review.text}</Text>
-      </View>
+      {actions && (
+        <View style={styles.actions}>
+          <Pressable onPress={() => navigate("/" + review.repositoryId)}>
+            <Text backgroundColor="primary" fontWeight="bold" fontSize="subheading" style={styles.button}>View Repository</Text>
+          </Pressable>
+          <Pressable onPress={() => confirmDeletion(review.id)}>
+            <Text backgroundColor="danger" fontWeight="bold" fontSize="subheading" style={styles.button}>Delete Review</Text>
+          </Pressable>
+        </View>
+      )}
     </View>
   )
 }

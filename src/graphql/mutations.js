@@ -29,3 +29,11 @@ mutation($review: CreateReviewInput) {
   }
 }
 `
+
+
+
+export const DELETE_REVIEW = gql`
+mutation($reviewId: ID!) {
+  deleteReview(id: $reviewId)
+}
+`

@@ -1,17 +1,21 @@
 import { useQuery } from "@apollo/client";
 import { GET_REPOSITORIES } from "../graphql/queries";
 import { useState } from "react";
+import { useDebounce } from "use-debounce";
 
 export default function useRepositories() {
   const [sort, setSort] = useState({
     orderBy: "CREATED_AT",
     orderDirection: "DESC",
   });
+  const [search, setSearch] = useState("");
+  const [debouncedSearch] = useDebounce(search, 500);
   const { data, loading, refetch } = useQuery(GET_REPOSITORIES, {
     fetchPolicy: "cache-and-network",
     variables: {
       orderBy: sort.orderBy,
       orderDirection: sort.orderDirection,
+      searchKeyword: debouncedSearch, 
     },
   });
 
@@ -48,5 +52,5 @@ export default function useRepositories() {
     })
   }
 
-  return { data, loading, refetch, sort, setSorting };
+  return { data, loading, refetch, sort, setSorting, search, setSearch };
 }
