@@ -3,21 +3,38 @@ import { GET_REPOSITORIES } from "../graphql/queries";
 import { useState } from "react";
 import { useDebounce } from "use-debounce";
 
-export default function useRepositories() {
+export default function useRepositories(variables) {
   const [sort, setSort] = useState({
     orderBy: "CREATED_AT",
     orderDirection: "DESC",
   });
   const [search, setSearch] = useState("");
   const [debouncedSearch] = useDebounce(search, 500);
-  const { data, loading, refetch } = useQuery(GET_REPOSITORIES, {
+  const { data, loading, refetch, fetchMore, ...result } = useQuery(GET_REPOSITORIES, {
     fetchPolicy: "cache-and-network",
     variables: {
       orderBy: sort.orderBy,
       orderDirection: sort.orderDirection,
       searchKeyword: debouncedSearch, 
+      ...variables
     },
   });
+
+  function handleFetchMore() {
+    const canFetchMore = !loading && data?.repositories.pageInfo.hasNextPage;
+
+    if(!canFetchMore) return;
+
+    fetchMore({
+      variables: {
+        after: data.repositories.pageInfo.endCursor,
+        orderBy: sort.orderBy,
+        orderDirection: sort.orderDirection,
+        searchKeyword: debouncedSearch,
+        ...variables
+      }
+    })
+  }
 
   function setSorting(value) {
     switch(value) {
@@ -52,5 +69,5 @@ export default function useRepositories() {
     })
   }
 
-  return { data, loading, refetch, sort, setSorting, search, setSearch };
+  return { data, loading, refetch, sort, setSorting, search, setSearch, fetchMore: handleFetchMore };
 }

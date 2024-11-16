@@ -23,7 +23,7 @@ export function ItemSeparator() {
 }
 
 function RepositoryList() {
-  const { data, setSorting, search, setSearch } = useRepositories();
+  const { data, setSorting, search, setSearch, fetchMore } = useRepositories({ first: 3 });
   const [sortValue, setSortValue] = useState("latest");
 
   function handleSortValueChange(value) {
@@ -40,7 +40,7 @@ function RepositoryList() {
       setOrder={handleSortValueChange}
       search={search}
       setSearch={setSearch}
-      set
+      onEndReach={fetchMore}
     />
   );
 }
@@ -74,6 +74,7 @@ export function RepositoryListContainer({
   setOrder,
   search,
   setSearch,
+  onEndReach
 }) {
   // Get the nodes from the edges array
   const repositoryNodes = repositories
@@ -101,6 +102,7 @@ export function RepositoryListContainer({
             />
           </>
         )}
+        onEndReached={onEndReach}
       />
     </>
   );
